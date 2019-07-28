@@ -1,14 +1,15 @@
 import java.util.Date;
 
 public class Event {	
-	protected String eventID;
-	protected String description;
-	protected Date startTime;
-	protected Date endTime;
-	protected String eventType;
+	private String eventID;
+	private String description;
+	private Date startTime;
+	private Date endTime;
+
 	
-	public Event(String eventID) {
+	public Event(String eventID, String desc) {
 		this.eventID = eventID;
+		this.description = desc;
 	
 	}
 	public Event() {
@@ -16,6 +17,32 @@ public class Event {
 	}
 	
 	public String toString() {
+		return eventID + ": "+ description;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public Date getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	public Date getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	public String getEventID() {
 		return eventID;
+	}
+	public void setEventID(String eventID) {
+		this.eventID = eventID;
 	}
 }

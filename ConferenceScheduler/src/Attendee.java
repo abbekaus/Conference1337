@@ -4,10 +4,9 @@ import java.util.Map;
 
 public class Attendee {
 	
-	protected String name;
-	protected String emailID;
-	protected String lunchOption;
-	protected Map<String,Event> enlistedEvents;
+	private String name;
+	private String emailID;
+	private Map<String,Event> enlistedEvents;
 	
 	public Attendee() {
 		enlistedEvents = new HashMap<String,Event>();
@@ -15,11 +14,11 @@ public class Attendee {
 	
 	
 	public void addEvent(Event ev) {
-		enlistedEvents.put(ev.eventID, ev);
+		enlistedEvents.put(ev.getEventID(), ev);
 	}
 	
 	public void removeEvent(Event ev) {	
-		enlistedEvents.remove(ev.eventID);
+		enlistedEvents.remove(ev.getEventID());
 	}
 	
 	public String getName() {
@@ -34,5 +33,18 @@ public class Attendee {
 	}
 	public void setEmail(String email) {
 		this.emailID = email;
+	}
+	
+	public String printAttendee() {
+		return name + ", " + emailID + " has chosen: " + enlistedEvents.toString();
+	}
+	
+	public void printEnlistedEvents() {
+		System.out.println(enlistedEvents.toString());
+		
+	}
+	
+	public void clearSchedule() {
+		enlistedEvents.clear();
 	}
 }
