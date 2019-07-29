@@ -1,3 +1,5 @@
+package conferenceApp;
+
 import util.Constants;
 
 public class Lecture extends Event implements Constants{

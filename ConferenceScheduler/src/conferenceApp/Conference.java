@@ -1,8 +1,15 @@
+package conferenceApp;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import javafx.application.Application;
+
+import javafx.stage.Stage;
+
+import ui.LoginScreen;
 
 import util.Constants;
 
@@ -10,10 +17,12 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class Conference implements Constants{
+
+public class Conference extends Application implements Constants{
 	
 	private ArrayList<Event> events;
 	private Map<String,Attendee> attendees;
+	private Attendee currentAttendee;
 	
 	public Conference() {
 		events = new ArrayList<Event>();
@@ -22,13 +31,14 @@ public class Conference implements Constants{
 	
 	public static void main(String[] args) {
 		Conference conf = new Conference();
-		conf.host();		
+		conf.host();
+		launch(args);
 	}
 	
 	private void host() {
 		try {
 			loadEvents(eventFile);
-			interact();
+		//	interact();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,23 +85,20 @@ public class Conference implements Constants{
 				chooseLectures(att);
 				addAttendee(att);
 			}
-			
-		
-			System.out.println("---------------------");
-			printAllAttendees();
+
 		}
 		
 	}
 	
 	
-	private void addAttendee(Attendee att) {
-		System.out.println("Welcome to this conference " + att.getName());
-		attendees.put(att.getEmail(),att);	
+	public void addAttendee(Attendee att) {
+		currentAttendee = att;
+		attendees.put(att.getEmail(),att);
+		System.out.println("After login: " + attendees.size());
 	}
 	
 	private void chooseLectures(Attendee att) throws ParseException {
 		att.clearSchedule();
-		printAllAttendees();
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Choose one am activity:");
 		for(int i = 0;i<events.size();i++) {
@@ -126,17 +133,29 @@ public class Conference implements Constants{
 		}
 		return isAttending;
 	}
-
-	private void printAllAttendees() {
-		for (String emailID : attendees.keySet()) {
-			attendees.get(emailID).printEnlistedEvents();
-		}
+	
+	public void removeAttendee(Attendee att) {
+		
+		attendees.remove(att.getEmail());
+		System.out.println("After removal: " + attendees.size());
 		
 	}
 	
-	private void removeAttendee(Attendee att) {
-		attendees.remove(att.getEmail());
-	}
+	 @Override
+	    public void start(Stage primaryStage) {
+	        LoginScreen logScr = new LoginScreen(this);
+	        logScr.drawScreen(primaryStage);
+	    }
+	    
+	 public Attendee getCurrentAttendee() {
+		 return currentAttendee;
+	 }
+	 
+	 public ArrayList<Event> getEvents(){
+		 return events;
+	 }
+
+	    
 
 	
 }

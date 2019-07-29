@@ -1,3 +1,5 @@
+package conferenceApp;
+
 import java.util.HashMap;
 import java.util.Map;
 
