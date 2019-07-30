@@ -35,18 +35,11 @@ public class OptionsScreen {
         grid.add(scenetitle, 0, 0, 2, 1);
         
 
-        Button lectureButton = new Button("Choose lectures");
+        Button lectureButton = new Button("Choose Events");
         HBox lectureHbBtn = new HBox(10);
         lectureHbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         lectureHbBtn.getChildren().add(lectureButton);
         grid.add(lectureButton, 0, 1);
-        
-        
-        Button lunchButton = new Button("Choose lectures");
-        HBox lunchHbBtn = new HBox(10);
-        lunchHbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        lunchHbBtn.getChildren().add(lunchButton);
-        grid.add(lunchButton, 0, 2);
         
         
         Button removeUserButton = new Button("Remove me from the conference");
@@ -70,12 +63,7 @@ public class OptionsScreen {
             	
             }
         });
-        lunchButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	
-            }
-        });
+
         removeUserButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

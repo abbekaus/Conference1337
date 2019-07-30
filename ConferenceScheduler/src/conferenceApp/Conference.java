@@ -2,17 +2,10 @@ package conferenceApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-
 import javafx.application.Application;
-
 import javafx.stage.Stage;
-
 import ui.LoginScreen;
-
-import util.Constants;
 
 import java.io.*;
 import java.text.ParseException;
@@ -21,100 +14,74 @@ import java.text.SimpleDateFormat;
 
 public class Conference extends Application implements Constants{
 	
-	private static ArrayList<Event> events;
+	private static ArrayList<Event> amEvents;
+	private static ArrayList<Event> pmEvents;
+	private static ArrayList<Event> lunchEvents;
 	private Map<String,Attendee> attendees;
 	private Attendee currentAttendee;
 	
 	public Conference() {
-		events = new ArrayList<Event>();
+		amEvents = new ArrayList<Event>();
+		pmEvents = new ArrayList<Event>();
+		lunchEvents = new ArrayList<Event>();
 		attendees = new HashMap<String,Attendee>();
 	}
 	
 	public static void main(String[] args) {
-		
-		
 		launch(args);
 	}
 	
-	private void host() {
-		
-
-	}
 	
 	private void loadEvents(String eventFile) throws IOException, ParseException {
-		
-		File file = new File(eventFile); 		  
-		BufferedReader br = new BufferedReader(new FileReader(file)); 	  
-		String st;
-		Event lecture;
-	    while ((st = br.readLine()) != null) {
-	    	String[] lectureDetails = st.split(",");
-		    lecture = new Event();
-		    lecture.setEventID(lectureDetails[0]);
-		    lecture.setDescription(lectureDetails[1]);
-		    lecture.setStartTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(lectureDetails[2]));
-		    lecture.setEndTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(lectureDetails[3]));
-		    events.add(lecture);
-		} 
-	}
-	/*
-	private void interact() throws ParseException {
-		while(attendees.size()<5){
-			
-			
-			Scanner scan = new Scanner(System.in);
-			Attendee att = new Attendee();
-			System.out.println("Enter your name:");
-			att.setName(scan.nextLine());
-			System.out.println("Enter yout email:");
-			att.setEmail(scan.nextLine());
-			
-			
-			if(alreadyAttending(att)) {
-				System.out.println("Already attending");
-				chooseLectures(attendees.get(att.getEmail()));
-			} else {	
-				chooseLectures(att);
-				addAttendee(att);
-			}
 
+		File file = new File(eventFile);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String st;
+		Event event;
+		while ((st = br.readLine()) != null) {
+			String[] lectureDetails = st.split(",");
+			event = new Event();
+			event.setEventID(lectureDetails[0]);
+			event.setDescription(lectureDetails[1]);
+			event.setStartTime(new SimpleDateFormat("HH:mm").parse(lectureDetails[2]));
+			event.setEndTime(new SimpleDateFormat("HH:mm").parse(lectureDetails[3]));
+			if (event.getEndTime()
+					.compareTo(new SimpleDateFormat("HH:mm").parse("12:00")) < 0) {
+				amEvents.add(event);
+			} else if (event.getStartTime()
+					.compareTo(new SimpleDateFormat("HH:mm").parse("13:00")) >= 0) {
+				pmEvents.add(event);
+			} else {
+				lunchEvents.add(event);
+			}
+			
 		}
-		
-	}*/
+		System.out.println(amEvents.toString());
+		System.out.println(pmEvents.toString());
+		System.out.println(lunchEvents.toString());
+		br.close();
+
+	}
 	
 	
 	public void addAttendee(Attendee att) {
 		currentAttendee = att;
 		attendees.put(att.getEmail(),att);
-		System.out.println("After login: " + attendees.size());
 	}
 	
-	/*
-	private void chooseLectures(Attendee att) throws ParseException {
-		att.clearSchedule();
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Choose one am activity:");
-		for(int i = 0;i<events.size();i++) {
-			if(events.get(i).getEndTime().compareTo(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse("2019-08-16 12:00:00")) < 0){
-				System.out.println(i + ". " + events.get(i).getEventID() + ": " + events.get(i).getDescription());
-			}
-		}
-		att.addEvent(events.get(scan.nextInt()));
-		System.out.println("Choose one pm activity:");
-		for(int i = 0;i<events.size();i++) {
-			if(events.get(i).getStartTime().compareTo(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse("2019-08-16 13:00:00")) >= 0){
-				System.out.println(i + ". " + events.get(i).getEventID() + ": " + events.get(i).getDescription());
-			}
-		}
-		att.addEvent(events.get(scan.nextInt()));
-		System.out.println("Choose which lunch alternative you want, Vegan, Fish or Chicken:");
-		String str = scan.next();
-		Event lunch = events.get(6);
-		lunch.setDescription(str);
-		att.addEvent(lunch);
-		System.out.println("Hi " + att.getName() + ". Welcome to this years conference. You have chosen the following schedule:");
-		att.printEnlistedEvents();
-	}*/
+	
+	public ArrayList<Event> getAMEvents() {
+		return amEvents;
+	}
+	
+	public ArrayList<Event> getPMEvents(){
+		return pmEvents;
+	}
+	
+	public ArrayList<Event> getLunchEvents(){
+		return lunchEvents;
+	}
+	
 	
 	public boolean alreadyAttending(Attendee att) {
 		boolean isAttending = false;
@@ -154,12 +121,7 @@ public class Conference extends Application implements Constants{
 	 public Attendee getCurrentAttendee() {
 		 return currentAttendee;
 	 }
-	 
-	 public ArrayList<Event> getEvents(){
-		 return events;
-	 }
 
-	    
 
 	
 }
