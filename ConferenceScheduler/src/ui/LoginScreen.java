@@ -27,7 +27,7 @@ public class LoginScreen {
 	}
 	
 	public void drawScreen(Stage primaryStage) {
-
+		System.out.println("LoginScreen: " + conference.getEvents().size());
 		primaryStage.setTitle("Hello World!");
 
         GridPane grid = new GridPane();
@@ -78,9 +78,16 @@ public class LoginScreen {
                 Attendee newAttendee = new Attendee();
                 newAttendee.setName(userName);
                 newAttendee.setEmail(userEmail);
-                conference.addAttendee(newAttendee);
-                OptionsScreen optScr = new OptionsScreen(conference, conference.getCurrentAttendee());
-                optScr.drawScreen();
+                if(conference.alreadyAttending(newAttendee)) {
+                	LectureScreen lectScr = new LectureScreen(conference, newAttendee);
+                	lectScr.drawScreen();
+                } else {
+                	conference.addAttendee(newAttendee);
+                    OptionsScreen optScr = new OptionsScreen(conference, conference.getCurrentAttendee());
+                    optScr.drawScreen();
+                }
+                
+                
             }
         });
         primaryStage.show();

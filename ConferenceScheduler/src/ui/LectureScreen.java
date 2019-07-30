@@ -42,19 +42,20 @@ public class LectureScreen {
 		ArrayList<Event> events = conference.getEvents();
 		int nbrOfEvents = events.size();
 		for (int i = 0; i < nbrOfEvents; i++) {
-
-			Label label = new Label(events.get(i).getEventID() + ": " + events.get(i).getDescription());
+			Event currentEvent = events.get(i);
+			Label label = new Label(currentEvent.getEventID() + ": " + currentEvent.getDescription());
 			grid.add(label, 0, i+1);
 			Button button = new Button("Choose lecture");
 			HBox hbBtn = new HBox(10);
 			hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 			hbBtn.getChildren().add(button);
-			grid.add(button, 0, i+1);
+			grid.add(button, 1, i+1);
 
 			button.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-
+					currentAttendee.addEvent(currentEvent);
+					currentAttendee.printEnlistedEvents();
 				}
 			});
 		}

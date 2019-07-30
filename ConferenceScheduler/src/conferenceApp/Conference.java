@@ -2,6 +2,7 @@ package conferenceApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -20,7 +21,7 @@ import java.text.SimpleDateFormat;
 
 public class Conference extends Application implements Constants{
 	
-	private ArrayList<Event> events;
+	private static ArrayList<Event> events;
 	private Map<String,Attendee> attendees;
 	private Attendee currentAttendee;
 	
@@ -30,22 +31,13 @@ public class Conference extends Application implements Constants{
 	}
 	
 	public static void main(String[] args) {
-		Conference conf = new Conference();
-		conf.host();
+		
+		
 		launch(args);
 	}
 	
 	private void host() {
-		try {
-			loadEvents(eventFile);
-		//	interact();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-						e.printStackTrace();
-		}	
+		
 
 	}
 	
@@ -65,7 +57,7 @@ public class Conference extends Application implements Constants{
 		    events.add(lecture);
 		} 
 	}
-	
+	/*
 	private void interact() throws ParseException {
 		while(attendees.size()<5){
 			
@@ -88,7 +80,7 @@ public class Conference extends Application implements Constants{
 
 		}
 		
-	}
+	}*/
 	
 	
 	public void addAttendee(Attendee att) {
@@ -97,6 +89,7 @@ public class Conference extends Application implements Constants{
 		System.out.println("After login: " + attendees.size());
 	}
 	
+	/*
 	private void chooseLectures(Attendee att) throws ParseException {
 		att.clearSchedule();
 		Scanner scan = new Scanner(System.in);
@@ -121,9 +114,9 @@ public class Conference extends Application implements Constants{
 		att.addEvent(lunch);
 		System.out.println("Hi " + att.getName() + ". Welcome to this years conference. You have chosen the following schedule:");
 		att.printEnlistedEvents();
-	}
+	}*/
 	
-	private boolean alreadyAttending(Attendee att) {
+	public boolean alreadyAttending(Attendee att) {
 		boolean isAttending = false;
 
 		for (String emailID : attendees.keySet()) {
@@ -143,7 +136,18 @@ public class Conference extends Application implements Constants{
 	
 	 @Override
 	    public void start(Stage primaryStage) {
-	        LoginScreen logScr = new LoginScreen(this);
+		 	Conference conf = new Conference();
+		 	try {
+				conf.loadEvents(eventFile);
+			//	interact();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+							e.printStackTrace();
+			}	
+	        LoginScreen logScr = new LoginScreen(conf);
 	        logScr.drawScreen(primaryStage);
 	    }
 	    
