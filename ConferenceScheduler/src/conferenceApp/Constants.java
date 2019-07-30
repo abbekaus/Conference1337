@@ -1,4 +1,4 @@
-package util;
+package conferenceApp;
 
 public interface Constants {
 	public static String lectureEvent = "lectureEvent";
