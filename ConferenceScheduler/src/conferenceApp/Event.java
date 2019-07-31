@@ -1,5 +1,7 @@
 package conferenceApp;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event {	
@@ -9,13 +11,30 @@ public class Event {
 	private Date endTime;
 	private String timeOfDay;
 
-	public Event(String eventID, String desc) {
-		this.eventID = eventID;
-		this.description = desc;
-	
+
+	public Event() {	
 	}
-	public Event() {
-		
+	
+	public Event(String eventDetails) throws ParseException {
+		String[] lectureDetails = eventDetails.split(",");
+		eventID = lectureDetails[0];
+		description = lectureDetails[1];
+		startTime = new SimpleDateFormat("HH:mm").parse(lectureDetails[2]);
+		endTime= new SimpleDateFormat("HH:mm").parse(lectureDetails[3]);
+		if (endTime
+				.compareTo(new SimpleDateFormat("HH:mm").parse("12:00")) < 0) {
+			timeOfDay = "am";
+			
+		} else if (startTime
+				.compareTo(new SimpleDateFormat("HH:mm").parse("13:00")) >= 0) {
+			timeOfDay = "pm";
+		} else {
+			timeOfDay = "lunch";
+		}
+	}
+	
+	public String printEvent() {
+		return eventID + "," + description + "," + startTime +"," + endTime + "," + timeOfDay; 
 	}
 	
 	public String getTimeOfDay() {

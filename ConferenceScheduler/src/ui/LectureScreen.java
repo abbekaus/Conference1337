@@ -78,7 +78,8 @@ public class LectureScreen {
 				@Override
 				public void handle(ActionEvent event) {
 					currentAttendee.addEvent(currentEvent);
-				
+					System.out.println("Deltagare: " + conference.getNbrOfAttendees());
+					
 				}
 			});
 		}

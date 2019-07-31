@@ -1,7 +1,8 @@
 package conferenceApp;
 
+import java.io.Serializable;
 
-public class Attendee {
+public class Attendee implements Serializable{
 	
 	private String name;
 	private String emailID;
@@ -53,11 +54,12 @@ public class Attendee {
 	}
 	
 	public void printAttendee() {
+		
 		System.out.println(name + ", " + emailID + " has chosen: ");
 		System.out.println("Before lunch: " + amEvent);
 		System.out.println("After lunch: " + pmEvent);
 		System.out.println("Lunch option: " + lunchOption);
-		System.out.println("---------------------------------");
+		System.out.println("---------------------------------"); 
 	}
 
 }

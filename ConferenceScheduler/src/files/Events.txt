@@ -1,9 +1,9 @@
 Growing Sunflowers,Learn how to grow sunflowers,09:00,11:00,lectureEvent
-Crafting Tables,Learn how to grow craft dining tables,09:00,11:00,lectureEvent
-Whistling 101,Beginners course on how to whistle,09:00,11:00,lectureEvent
+Less is more,Learn how to get your point across without having to use too many words to get to the point of what you are trying to say,09:00,11:00,lectureEvent
+Whistling 101,Beginners course,09:00,11:00,lectureEvent
 Whistling 102,Whistle like the pros,13:00,15:00,lectureEvent
 Painting Landscapes,Becoming Bob Ross,13:00,15:00,lectureEvent
-Imagination Improvement,Learn how to come up with reasonable lecture topics,13:00,15:00,lectureEvent
+Imagination,Learn how to come up with reasonable lecture topics,13:00,15:00,lectureEvent
 Lunch,Vegan,12:00,13:00,lunchEvent
 Lunch,Fish,12:00,13:00,lunchEvent
 Lunch,Chicken,12:00,13:00,lunchEvent

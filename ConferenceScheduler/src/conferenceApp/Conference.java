@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import ui.LoginScreen;
@@ -33,42 +36,59 @@ public class Conference extends Application implements Constants{
 	}
 	
 	
-	private void loadEvents(String eventFile) throws IOException, ParseException {
+	private void loadEvents() throws IOException, ParseException {
 
 		File file = new File(eventFile);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String st;
 		Event event;
 		while ((st = br.readLine()) != null) {
-			String[] lectureDetails = st.split(",");
-			event = new Event();
-			event.setEventID(lectureDetails[0]);
-			event.setDescription(lectureDetails[1]);
-			event.setStartTime(new SimpleDateFormat("HH:mm").parse(lectureDetails[2]));
-			event.setEndTime(new SimpleDateFormat("HH:mm").parse(lectureDetails[3]));
-			if (event.getEndTime()
-					.compareTo(new SimpleDateFormat("HH:mm").parse("12:00")) < 0) {
-				event.setTimeOfDay("am");
+			event = new Event(st);
+			if (event.getEndTime().compareTo(new SimpleDateFormat("HH:mm").parse("12:00")) < 0) {
 				amEvents.add(event);
-			} else if (event.getStartTime()
-					.compareTo(new SimpleDateFormat("HH:mm").parse("13:00")) >= 0) {
-				event.setTimeOfDay("pm");
+			} else if (event.getStartTime().compareTo(new SimpleDateFormat("HH:mm").parse("13:00")) >= 0) {
 				pmEvents.add(event);
 			} else {
-				event.setTimeOfDay("lunch");
 				lunchEvents.add(event);
 			}
-			
 		}
 		br.close();
 
 	}
 	
+	private void loadAttendees() {
+		Attendee att = null;
+		boolean cont = true;
+		try {
+
+			FileInputStream fileIn = new FileInputStream(attendeeFile);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			while (cont) {
+				att = (Attendee) in.readObject();
+				if (att != null)
+					attendees.put(att.getEmail(), att);
+				else
+					cont = false;
+			}
+			
+			in.close();
+			fileIn.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+			return;
+		} catch (ClassNotFoundException c) {
+			System.out.println("Attendee class not found");
+			c.printStackTrace();
+			return;
+		}
+		System.out.println();
+	}
+
+	
 	
 	public void addAttendee(Attendee att) {
 		currentAttendee = att;
 		attendees.put(att.getEmail(),att);
-		printAllAttendees();
 	}
 	
 	
@@ -86,14 +106,8 @@ public class Conference extends Application implements Constants{
 	
 	
 	public boolean alreadyAttending(Attendee att) {
-		boolean isAttending = false;
-
-		for (String emailID : attendees.keySet()) {
-			if (attendees.get(emailID).getEmail().equals(att.getEmail())) {
-				isAttending = true;
-			}
-		}
-		return isAttending;
+		return attendees.containsKey(att.getEmail());
+		
 	}
 	
 	public void removeAttendee(Attendee att) {
@@ -107,7 +121,8 @@ public class Conference extends Application implements Constants{
 	    public void start(Stage primaryStage) {
 		 	Conference conf = new Conference();
 		 	try {
-				conf.loadEvents(eventFile);
+				conf.loadEvents();
+				
 			//	interact();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -115,7 +130,8 @@ public class Conference extends Application implements Constants{
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 							e.printStackTrace();
-			}	
+			}
+		 	conf.loadAttendees();
 	        LoginScreen logScr = new LoginScreen(conf);
 	        logScr.drawScreen(primaryStage);
 	    }
@@ -124,17 +140,42 @@ public class Conference extends Application implements Constants{
 		 return currentAttendee;
 	 }
 	 
-	 public void printAllAttendees() {
-		 if(attendees.size() >0) {
-			 Iterator it = attendees.entrySet().iterator();
-			    while (it.hasNext()) {
-			        Map.Entry pair = (Map.Entry)it.next();
-			        System.out.println(pair.getKey() + " = " + pair.getValue());
-			        it.remove(); // avoids a ConcurrentModificationException
-			    }
-		 }
-	 }
 
+	 public int getNbrOfAttendees() {
+			return attendees.size();
+		}
 
+	@Override
+	public void stop() throws IOException {
+		System.out.println("Stage is closing");
+		Attendee att1 = new Attendee();
+		Attendee att2 = new Attendee();
+		att1.setName("heja");
+		att1.setEmail("heja11");
+		attendees.put("hej", att1);
+		att2.setName("aaaaaa");
+		att2.setEmail("hsssssss");
+		attendees.put("gggg", att2);
+		System.out.println(attendees.size());
+		FileOutputStream fileOut = new FileOutputStream(attendeeFile);
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.flush();
+		attendees.forEach((String s, Attendee a) -> {
+			a.printAttendee();
+			try {
+				Attendee att = (Attendee) a;
+				out.writeObject(att);
+				System.out.printf("Serialized data is saved");
+			} catch (IOException i) {
+				i.printStackTrace();
+			}
+
+		});
+		
+		
+		out.close();
+		fileOut.close();
+
+	}
 	
 }
