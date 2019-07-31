@@ -68,6 +68,7 @@ public class OptionsScreen {
             @Override
             public void handle(ActionEvent event) {
             	conference.removeAttendee(currentAttendee);
+            	
             }
         });
 	}

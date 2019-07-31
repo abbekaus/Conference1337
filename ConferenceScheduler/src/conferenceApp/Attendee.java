@@ -1,28 +1,33 @@
 package conferenceApp;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class Attendee {
 	
 	private String name;
 	private String emailID;
-	private Map<String,Event> enlistedEvents;
+	private Event amEvent;
+	private Event pmEvent;
+	private Event lunchOption;
 	
-	public Attendee() {
-		enlistedEvents = new HashMap<String,Event>();
+
+	public Event getAmEvent() {
+		return amEvent;
 	}
-	
-	
-	public void addEvent(Event ev) {
-		enlistedEvents.put(ev.getEventID(), ev);
+	public void setAmEvent(Event amEvent) {
+		this.amEvent = amEvent;
 	}
-	
-	public void removeEvent(Event ev) {	
-		enlistedEvents.remove(ev.getEventID());
+	public Event getPmEvent() {
+		return pmEvent;
 	}
-	
+	public void setPmEvent(Event pmEvent) {
+		this.pmEvent = pmEvent;
+	}
+	public Event getLunchOption() {
+		return lunchOption;
+	}
+	public void setLunchOption(Event lunchOption) {
+		this.lunchOption = lunchOption;
+	}
 	public String getName() {
 		return name;
 	}
@@ -37,16 +42,22 @@ public class Attendee {
 		this.emailID = email;
 	}
 	
-	public String printAttendee() {
-		return name + ", " + emailID + " has chosen: " + enlistedEvents.toString();
+	public void addEvent(Event ev) {
+		if(ev.getTimeOfDay().equals("am")) {
+			amEvent = ev;
+		} else if(ev.getTimeOfDay().equals("pm")) {
+			pmEvent = ev;
+		} else {
+			lunchOption = ev;
+		}
 	}
 	
-	public void printEnlistedEvents() {
-		System.out.println(enlistedEvents.toString());
-		
+	public void printAttendee() {
+		System.out.println(name + ", " + emailID + " has chosen: ");
+		System.out.println("Before lunch: " + amEvent);
+		System.out.println("After lunch: " + pmEvent);
+		System.out.println("Lunch option: " + lunchOption);
+		System.out.println("---------------------------------");
 	}
-	
-	public void clearSchedule() {
-		enlistedEvents.clear();
-	}
+
 }

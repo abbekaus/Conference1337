@@ -78,7 +78,6 @@ public class LectureScreen {
 				@Override
 				public void handle(ActionEvent event) {
 					currentAttendee.addEvent(currentEvent);
-					currentAttendee.printEnlistedEvents();
 				
 				}
 			});

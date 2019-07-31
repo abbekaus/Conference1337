@@ -2,6 +2,7 @@ package conferenceApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -47,18 +48,18 @@ public class Conference extends Application implements Constants{
 			event.setEndTime(new SimpleDateFormat("HH:mm").parse(lectureDetails[3]));
 			if (event.getEndTime()
 					.compareTo(new SimpleDateFormat("HH:mm").parse("12:00")) < 0) {
+				event.setTimeOfDay("am");
 				amEvents.add(event);
 			} else if (event.getStartTime()
 					.compareTo(new SimpleDateFormat("HH:mm").parse("13:00")) >= 0) {
+				event.setTimeOfDay("pm");
 				pmEvents.add(event);
 			} else {
+				event.setTimeOfDay("lunch");
 				lunchEvents.add(event);
 			}
 			
 		}
-		System.out.println(amEvents.toString());
-		System.out.println(pmEvents.toString());
-		System.out.println(lunchEvents.toString());
 		br.close();
 
 	}
@@ -67,6 +68,7 @@ public class Conference extends Application implements Constants{
 	public void addAttendee(Attendee att) {
 		currentAttendee = att;
 		attendees.put(att.getEmail(),att);
+		printAllAttendees();
 	}
 	
 	
@@ -120,6 +122,17 @@ public class Conference extends Application implements Constants{
 	    
 	 public Attendee getCurrentAttendee() {
 		 return currentAttendee;
+	 }
+	 
+	 public void printAllAttendees() {
+		 if(attendees.size() >0) {
+			 Iterator it = attendees.entrySet().iterator();
+			    while (it.hasNext()) {
+			        Map.Entry pair = (Map.Entry)it.next();
+			        System.out.println(pair.getKey() + " = " + pair.getValue());
+			        it.remove(); // avoids a ConcurrentModificationException
+			    }
+		 }
 	 }
 
 

@@ -7,8 +7,8 @@ public class Event {
 	private String description;
 	private Date startTime;
 	private Date endTime;
+	private String timeOfDay;
 
-	
 	public Event(String eventID, String desc) {
 		this.eventID = eventID;
 		this.description = desc;
@@ -16,6 +16,13 @@ public class Event {
 	}
 	public Event() {
 		
+	}
+	
+	public String getTimeOfDay() {
+		return timeOfDay;
+	}
+	public void setTimeOfDay(String timeOfDay) {
+		this.timeOfDay = timeOfDay;
 	}
 	
 	public String toString() {

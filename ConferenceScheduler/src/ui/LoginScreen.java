@@ -27,7 +27,6 @@ public class LoginScreen {
 	}
 
 	public void drawScreen(Stage primaryStage) {
-		System.out.println("LoginScreen: " + conference.getAMEvents().size());
 		primaryStage.setTitle("Conference");
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
