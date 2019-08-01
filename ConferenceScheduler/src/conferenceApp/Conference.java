@@ -15,27 +15,25 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+public class Conference extends Application implements Constants {
 
-public class Conference extends Application implements Constants{
-	
 	private static ArrayList<Event> amEvents;
 	private static ArrayList<Event> pmEvents;
 	private static ArrayList<Event> lunchEvents;
-	private Map<String,Attendee> attendees;
+	private Map<String, Attendee> attendees;
 	private Attendee currentAttendee;
-	
+
 	public Conference() {
 		amEvents = new ArrayList<Event>();
 		pmEvents = new ArrayList<Event>();
 		lunchEvents = new ArrayList<Event>();
-		attendees = new HashMap<String,Attendee>();
+		attendees = new HashMap<String, Attendee>();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-	
+
 	private void loadEvents() throws IOException, ParseException {
 
 		File file = new File(eventFile);
@@ -55,22 +53,14 @@ public class Conference extends Application implements Constants{
 		br.close();
 
 	}
-	
+
 	private void loadAttendees() {
 		Attendee att = null;
-		boolean cont = true;
-		try {
 
+		try {
 			FileInputStream fileIn = new FileInputStream(attendeeFile);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			while (cont) {
-				att = (Attendee) in.readObject();
-				if (att != null)
-					attendees.put(att.getEmail(), att);
-				else
-					cont = false;
-			}
-			
+			attendees = (HashMap) in.readObject();
 			in.close();
 			fileIn.close();
 		} catch (IOException i) {
@@ -81,101 +71,85 @@ public class Conference extends Application implements Constants{
 			c.printStackTrace();
 			return;
 		}
-		System.out.println();
+		System.out.println(attendees.toString());
 	}
 
-	
-	
 	public void addAttendee(Attendee att) {
 		currentAttendee = att;
-		attendees.put(att.getEmail(),att);
+		attendees.put(att.getEmail(), att);
+		
+		try {
+			FileOutputStream fileOut = new FileOutputStream(attendeeFile);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(attendees);
+			System.out.printf(attendees.toString());
+			out.close();
+			fileOut.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
+
+		
+
+	
 	}
-	
-	
+
 	public ArrayList<Event> getAMEvents() {
 		return amEvents;
 	}
-	
-	public ArrayList<Event> getPMEvents(){
+
+	public ArrayList<Event> getPMEvents() {
 		return pmEvents;
 	}
-	
-	public ArrayList<Event> getLunchEvents(){
+
+	public ArrayList<Event> getLunchEvents() {
 		return lunchEvents;
 	}
-	
-	
+
 	public boolean alreadyAttending(Attendee att) {
 		return attendees.containsKey(att.getEmail());
-		
+
 	}
-	
+
 	public void removeAttendee(Attendee att) {
-		
+
 		attendees.remove(att.getEmail());
 		System.out.println("After removal: " + attendees.size());
-		
-	}
-	
-	 @Override
-	    public void start(Stage primaryStage) {
-		 	Conference conf = new Conference();
-		 	try {
-				conf.loadEvents();
-				
-			//	interact();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-							e.printStackTrace();
-			}
-		 	conf.loadAttendees();
-	        LoginScreen logScr = new LoginScreen(conf);
-	        logScr.drawScreen(primaryStage);
-	    }
-	    
-	 public Attendee getCurrentAttendee() {
-		 return currentAttendee;
-	 }
-	 
 
-	 public int getNbrOfAttendees() {
-			return attendees.size();
+	}
+
+	@Override
+	public void start(Stage primaryStage) {
+		Conference conf = new Conference();
+		try {
+			conf.loadEvents();
+
+			// interact();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		conf.loadAttendees();
+		LoginScreen logScr = new LoginScreen(conf);
+		logScr.drawScreen(primaryStage);
+	}
+
+	public Attendee getCurrentAttendee() {
+		return currentAttendee;
+	}
+
+	public int getNbrOfAttendees() {
+		return attendees.size();
+	}
 
 	@Override
 	public void stop() throws IOException {
-		System.out.println("Stage is closing");
-		Attendee att1 = new Attendee();
-		Attendee att2 = new Attendee();
-		att1.setName("heja");
-		att1.setEmail("heja11");
-		attendees.put("hej", att1);
-		att2.setName("aaaaaa");
-		att2.setEmail("hsssssss");
-		attendees.put("gggg", att2);
-		System.out.println(attendees.size());
-		FileOutputStream fileOut = new FileOutputStream(attendeeFile);
-		ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		out.flush();
-		attendees.forEach((String s, Attendee a) -> {
-			a.printAttendee();
-			try {
-				Attendee att = (Attendee) a;
-				out.writeObject(att);
-				System.out.printf("Serialized data is saved");
-			} catch (IOException i) {
-				i.printStackTrace();
-			}
-
-		});
 		
-		
-		out.close();
-		fileOut.close();
-
 	}
-	
+
+		
+
 }

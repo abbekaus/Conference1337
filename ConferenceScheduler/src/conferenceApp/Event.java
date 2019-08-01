@@ -1,10 +1,11 @@
 package conferenceApp;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Event {	
+public class Event implements Serializable {	
 	private String eventID;
 	private String description;
 	private Date startTime;
