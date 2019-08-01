@@ -22,7 +22,6 @@ public class OptionsScreen {
 		this.currentAttendee = att;
 		this.conference = conf;
 	}
-	
 
 	public void drawScreen() {
 		GridPane grid = new GridPane();
@@ -30,37 +29,31 @@ public class OptionsScreen {
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
+        
         Text scenetitle = new Text("Choose action:");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
-        
-
         Button lectureButton = new Button("Choose Events");
         HBox lectureHbBtn = new HBox(10);
         lectureHbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         lectureHbBtn.getChildren().add(lectureButton);
         grid.add(lectureButton, 0, 1);
-        
-        
         Button removeUserButton = new Button("Remove me from the conference");
 		HBox removeUserHbButton = new HBox(10);
 		removeUserHbButton.setAlignment(Pos.BOTTOM_RIGHT);
 		removeUserHbButton.getChildren().add(removeUserButton);
         grid.add(removeUserButton, 0, 3);
 
-        
     	Stage stage = new Stage();
-        stage.setTitle("My New Stage Title");
+        stage.setTitle("Main menu");
         stage.setScene(new Scene(grid, 450, 450));
         stage.show();
-        
-        
+               
         lectureButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
             	LectureScreen lectScr = new LectureScreen(conference, currentAttendee);
-            	lectScr.drawScreen();
-            	
+            	lectScr.drawScreen();           	
             }
         });
 
@@ -68,7 +61,7 @@ public class OptionsScreen {
             @Override
             public void handle(ActionEvent event) {
             	conference.removeAttendee(currentAttendee);
-            	
+            	conference.saveAttendees();
             }
         });
 	}

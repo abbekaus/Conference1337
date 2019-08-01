@@ -2,15 +2,10 @@ package conferenceApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import ui.LoginScreen;
-
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,12 +25,49 @@ public class Conference extends Application implements Constants {
 		attendees = new HashMap<String, Attendee>();
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	public ArrayList<Event> getAMEvents() {
+		return amEvents;
 	}
 
-	private void loadEvents() throws IOException, ParseException {
+	public ArrayList<Event> getPMEvents() {
+		return pmEvents;
+	}
 
+	public ArrayList<Event> getLunchEvents() {
+		return lunchEvents;
+	}
+
+	public boolean alreadyAttending(Attendee att) {
+		return attendees.containsKey(att.getEmail());
+	}
+
+	public void removeAttendee(Attendee att) {
+		attendees.remove(att.getEmail());
+	}
+
+	public Attendee getCurrentAttendee() {
+		return currentAttendee;
+	}
+
+	public int getNbrOfAttendees() {
+		return attendees.size();
+	}
+
+	public Attendee getAttendee(String userEmail) {
+		return attendees.get(userEmail);
+	}
+	
+	public void addAttendee(Attendee att) {
+		currentAttendee = att;
+		attendees.put(att.getEmail(), att);
+	}
+	
+	/**
+	 * Loads the events for the conference from the Events file.
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	private void loadEvents() throws IOException, ParseException {
 		File file = new File(eventFile);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String st;
@@ -51,12 +83,12 @@ public class Conference extends Application implements Constants {
 			}
 		}
 		br.close();
-
 	}
-
+	
+	/**
+	 * Loads the attendees already registered to the conference from the Attendees file.
+	 */
 	private void loadAttendees() {
-		Attendee att = null;
-
 		try {
 			FileInputStream fileIn = new FileInputStream(attendeeFile);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -67,55 +99,28 @@ public class Conference extends Application implements Constants {
 			i.printStackTrace();
 			return;
 		} catch (ClassNotFoundException c) {
-			System.out.println("Attendee class not found");
 			c.printStackTrace();
 			return;
 		}
-		System.out.println(attendees.toString());
 	}
-
-	public void addAttendee(Attendee att) {
-		currentAttendee = att;
-		attendees.put(att.getEmail(), att);
-		
+	
+	/**
+	 * Saves the attendees that are currently registered to the Attendees file.
+	 */
+	public void saveAttendees() {
 		try {
 			FileOutputStream fileOut = new FileOutputStream(attendeeFile);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(attendees);
-			System.out.printf(attendees.toString());
 			out.close();
 			fileOut.close();
 		} catch (IOException i) {
 			i.printStackTrace();
 		}
-
-		
-
-	
 	}
 
-	public ArrayList<Event> getAMEvents() {
-		return amEvents;
-	}
-
-	public ArrayList<Event> getPMEvents() {
-		return pmEvents;
-	}
-
-	public ArrayList<Event> getLunchEvents() {
-		return lunchEvents;
-	}
-
-	public boolean alreadyAttending(Attendee att) {
-		return attendees.containsKey(att.getEmail());
-
-	}
-
-	public void removeAttendee(Attendee att) {
-
-		attendees.remove(att.getEmail());
-		System.out.println("After removal: " + attendees.size());
-
+	public static void main(String[] args) {
+		launch(args);
 	}
 
 	@Override
@@ -123,33 +128,14 @@ public class Conference extends Application implements Constants {
 		Conference conf = new Conference();
 		try {
 			conf.loadEvents();
-
-			// interact();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		conf.loadAttendees();
 		LoginScreen logScr = new LoginScreen(conf);
 		logScr.drawScreen(primaryStage);
 	}
-
-	public Attendee getCurrentAttendee() {
-		return currentAttendee;
-	}
-
-	public int getNbrOfAttendees() {
-		return attendees.size();
-	}
-
-	@Override
-	public void stop() throws IOException {
-		
-	}
-
-		
 
 }

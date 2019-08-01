@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event implements Serializable {	
+	private static final long serialVersionUID = 1L;
 	private String eventID;
 	private String description;
 	private Date startTime;
@@ -24,8 +25,7 @@ public class Event implements Serializable {
 		endTime= new SimpleDateFormat("HH:mm").parse(lectureDetails[3]);
 		if (endTime
 				.compareTo(new SimpleDateFormat("HH:mm").parse("12:00")) < 0) {
-			timeOfDay = "am";
-			
+			timeOfDay = "am";		
 		} else if (startTime
 				.compareTo(new SimpleDateFormat("HH:mm").parse("13:00")) >= 0) {
 			timeOfDay = "pm";
@@ -34,44 +34,24 @@ public class Event implements Serializable {
 		}
 	}
 	
-	public String printEvent() {
-		return eventID + "," + description + "," + startTime +"," + endTime + "," + timeOfDay; 
-	}
-	
 	public String getTimeOfDay() {
 		return timeOfDay;
 	}
-	public void setTimeOfDay(String timeOfDay) {
-		this.timeOfDay = timeOfDay;
-	}
-	
-	public String toString() {
-		return eventID + ": "+ description;
-	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
+
 	public Date getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
+
 	public Date getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
+
 	public String getEventID() {
 		return eventID;
 	}
-	public void setEventID(String eventID) {
-		this.eventID = eventID;
-	}
+
 }

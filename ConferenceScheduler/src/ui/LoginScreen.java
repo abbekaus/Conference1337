@@ -25,7 +25,7 @@ public class LoginScreen {
 	public LoginScreen(Conference conf) {
 		this.conference = conf;
 	}
-
+	
 	public void drawScreen(Stage primaryStage) {
 		primaryStage.setTitle("Conference");
 		GridPane grid = new GridPane();
@@ -33,8 +33,8 @@ public class LoginScreen {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
-		Scene scene = new Scene(grid, 300, 275);
 		
+		Scene scene = new Scene(grid, 300, 275);		
 		Text scenetitle = new Text("Welcome");
 		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		grid.add(scenetitle, 0, 0, 2, 1);
@@ -52,7 +52,7 @@ public class LoginScreen {
 		hbBtn.getChildren().add(signInButton);
 		grid.add(hbBtn, 1, 4);
 		primaryStage.setScene(scene);
-
+		
 		signInButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -73,10 +73,9 @@ public class LoginScreen {
 				newAttendee.setEmail(userEmail);
 				if (!conference.alreadyAttending(newAttendee)) {
 					conference.addAttendee(newAttendee);
-				}
-				OptionsScreen optScr = new OptionsScreen(conference, conference.getCurrentAttendee());
+				} 
+				OptionsScreen optScr = new OptionsScreen(conference, conference.getAttendee(userEmail));
 				optScr.drawScreen();
-
 			}
 		});
 		primaryStage.show();
